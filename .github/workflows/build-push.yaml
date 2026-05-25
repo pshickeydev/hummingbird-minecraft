@@ -41,7 +41,7 @@ jobs:
       - name: Load Minecraft version
         id: mc
         run: |
-          set -ea
+          set -e
           set -o allexport
           . ./.minecraft-version
           set +o allexport

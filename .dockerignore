@@ -1,0 +1,6 @@
+.github
+.git
+*.md
+openshift
+*.sts.yaml
+renovate.json
