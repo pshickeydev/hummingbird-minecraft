@@ -98,7 +98,6 @@ jobs:
         gh pr create \
           --base main \
           --head "$BRANCH_NAME" \
-          --label updated \
           --title "chore: bump Minecraft to $NEW_VERSION" \
           --body "Bump Minecraft server version from ${{ steps.check.outputs.current_version }} to ${{ steps.check.outputs.new_version }}
           **Changes:**
