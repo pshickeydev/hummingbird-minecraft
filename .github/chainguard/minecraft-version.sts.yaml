@@ -4,3 +4,4 @@ subject: repo:pshickeydev/hummingbird-minecraft:ref:refs/heads/main
 permissions:
   contents: write
   pull_requests: write
+  workflows: write
