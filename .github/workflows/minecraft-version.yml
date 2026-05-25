@@ -38,7 +38,7 @@ jobs:
         LATEST_VERSION=$(echo "$VERSION_MANIFEST" | jq -r '.latest.release')
         MANIFEST_URL=$(echo "$VERSION_MANIFEST" | jq -r --arg ver "$LATEST_VERSION" '.versions[] | select(.id == $ver) | .url')
         VERSION_MANIFEST_CONTENT=$(curl -fsSL "$MANIFEST_URL")
-        SERVER_JAR_HASH=$(echo "$VERSION_MANIFEST_CONTENT" | jq -r '.downloads.server.url' | sed 's|.*/||')
+        SERVER_JAR_HASH=$(echo "$VERSION_MANIFEST_CONTENT" | jq -r '.downloads.server.hash')
 
         CURRENT_VERSION=$(grep '^MINECRAFT_VERSION=' .minecraft-version | cut -d'"' -f2)
         CURRENT_JAR_HASH=$(grep '^MINECRAFT_SERVER_JAR_HASH=' .minecraft-version | cut -d'"' -f2)
@@ -88,7 +88,7 @@ jobs:
         NEW_VERSION="${{ steps.check.outputs.new_version }}"
         BRANCH_NAME="chore/minecraft-version-$NEW_VERSION"
         git remote add origin-sts https://x-access-token:${{ steps.octo-sts.outputs.token }}@github.com/${{ github.repository }}.git
-        git push origin-sts "$BRANCH_NAME"
+        git push --force-with-lease origin-sts "$BRANCH_NAME"
 
     - name: Create pull request
       if: steps.check.outputs.update_available == 'true'
