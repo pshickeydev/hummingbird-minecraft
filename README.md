@@ -8,6 +8,14 @@ A Minecraft server container that downloads server.jar from the Microsoft Mojang
 podman build -t hummingbird-minecraft:latest -f Containerfile
 ```
 
+Local builds require `MINECRAFT_SERVER_JAR_URL` as a build argument. Override the version by setting it to the desired Mojang server JAR URL:
+
+```bash
+podman build \
+  --build-arg MINECRAFT_SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/<hash>/server.jar" \
+  -t hummingbird-minecraft:latest -f Containerfile
+```
+
 ## Run
 
 ```bash

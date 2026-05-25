@@ -10,4 +10,5 @@ FROM quay.io/hummingbird/openjdk:25.0.3-runtime@sha256:1aa412d8d94fa07eccd14a928
 USER 65532
 COPY --from=downloader --chown=65532:65532 /tmp/server.jar /app/server.jar
 WORKDIR /server_files
+EXPOSE 25565
 ENTRYPOINT ["/usr/bin/java", "-Xmx3G", "-Xms512M", "-XX:SoftMaxHeapSize=2G", "-jar", "/app/server.jar", "--nogui"]
