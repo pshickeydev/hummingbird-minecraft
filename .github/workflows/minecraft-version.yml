@@ -40,8 +40,8 @@ jobs:
         VERSION_MANIFEST_CONTENT=$(curl -fsSL "$MANIFEST_URL")
         SERVER_JAR_HASH=$(echo "$VERSION_MANIFEST_CONTENT" | jq -r '.downloads.server.url' | sed 's|.*/||')
 
-        CURRENT_VERSION=$(grep -oP '^  MINECRAFT_VERSION:\s*"\K[0-9.]+' .github/workflows/build-push.yaml || true)
-        CURRENT_JAR_HASH=$(grep -oP '^  MINECRAFT_SERVER_JAR_HASH:\s*"\K[a-f0-9]+' .github/workflows/build-push.yaml || true)
+        CURRENT_VERSION=$(grep '^MINECRAFT_VERSION=' .minecraft-version | cut -d'"' -f2)
+        CURRENT_JAR_HASH=$(grep '^MINECRAFT_SERVER_JAR_HASH=' .minecraft-version | cut -d'"' -f2)
 
         echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
         echo "current_jar_hash=$CURRENT_JAR_HASH" >> "$GITHUB_OUTPUT"
@@ -71,8 +71,7 @@ jobs:
         NEW_VERSION="${{ steps.check.outputs.new_version }}"
         NEW_JAR_HASH="${{ steps.check.outputs.new_jar_hash }}"
 
-        sed -i "s|^  MINECRAFT_VERSION:.*|  MINECRAFT_VERSION: \"$NEW_VERSION\"|" .github/workflows/build-push.yaml
-        sed -i "s|^  MINECRAFT_SERVER_JAR_HASH:.*|  MINECRAFT_SERVER_JAR_HASH: \"$NEW_JAR_HASH\"|" .github/workflows/build-push.yaml
+        printf 'MINECRAFT_VERSION="%s"\nMINECRAFT_SERVER_JAR_HASH="%s"\n' "$NEW_VERSION" "$NEW_JAR_HASH" > .minecraft-version
 
         echo "Updated versions to $NEW_VERSION (hash: $NEW_JAR_HASH)"
 
@@ -80,7 +79,7 @@ jobs:
       if: steps.check.outputs.update_available == 'true'
       run: |
         NEW_VERSION="${{ steps.check.outputs.new_version }}"
-        git add .github/workflows/build-push.yaml
+        git add .minecraft-version
         git commit -m "chore: bump Minecraft to $NEW_VERSION" || echo "No changes to commit"
 
     - name: Push changes

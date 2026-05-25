@@ -6,14 +6,13 @@ on:
       - main
     paths:
       - .github/workflows/build-push.yaml
+      - .minecraft-version
       - Containerfile
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  MINECRAFT_VERSION: "26.1.1"
-  MINECRAFT_SERVER_JAR_HASH: "49c8195703ad0ba4f0a4efbccfd85a4a8ca57431"
 
 jobs:
   lint:
@@ -38,6 +37,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Load Minecraft version
+        id: mc
+        run: |
+          set -ea
+          set -o allexport
+          . ./.minecraft-version
+          set +o allexport
+          echo "MINECRAFT_VERSION=$MINECRAFT_VERSION" >> "$GITHUB_ENV"
+          echo "MINECRAFT_SERVER_JAR_HASH=$MINECRAFT_SERVER_JAR_HASH" >> "$GITHUB_ENV"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4
