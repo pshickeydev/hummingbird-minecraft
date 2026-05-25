@@ -38,7 +38,7 @@ jobs:
         LATEST_VERSION=$(echo "$VERSION_MANIFEST" | jq -r '.latest.release')
         MANIFEST_URL=$(echo "$VERSION_MANIFEST" | jq -r --arg ver "$LATEST_VERSION" '.versions[] | select(.id == $ver) | .url')
         VERSION_MANIFEST_CONTENT=$(curl -fsSL "$MANIFEST_URL")
-        SERVER_JAR_HASH=$(echo "$VERSION_MANIFEST_CONTENT" | jq -r '.downloads.server.hash')
+        SERVER_JAR_HASH=$(echo "$VERSION_MANIFEST_CONTENT" | jq -r '.downloads.server.sha1')
 
         CURRENT_VERSION=$(grep '^MINECRAFT_VERSION=' .minecraft-version | cut -d'"' -f2)
         CURRENT_JAR_HASH=$(grep '^MINECRAFT_SERVER_JAR_HASH=' .minecraft-version | cut -d'"' -f2)
