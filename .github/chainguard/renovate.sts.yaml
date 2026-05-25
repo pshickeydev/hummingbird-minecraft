@@ -7,5 +7,6 @@ permissions:
   issues: write
   members: read
   pull_requests: write
+  security_events: read
   statuses: write
   workflows: write
