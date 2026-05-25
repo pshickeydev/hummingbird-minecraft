@@ -13,6 +13,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   MINECRAFT_VERSION: "26.1.2"
+  MINECRAFT_SERVER_JAR_HASH: "97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51"
 
 jobs:
   lint:
@@ -78,3 +79,5 @@ jobs:
           no-cache: ${{ github.event_name == 'schedule' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            MINECRAFT_SERVER_JAR_HASH=${{ env.MINECRAFT_SERVER_JAR_HASH }}
