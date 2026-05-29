@@ -55,6 +55,6 @@ Your world and configuration are preserved since they live on the host in `./ser
 
 Three GitHub Actions workflows keep the project maintained:
 
-- **build-push** — Lints the Containerfile, builds the image, verifies it starts correctly, and pushes to GHCR on every `main` push that changes the Containerfile or the workflow itself.
+- **build-push** — Lints the Containerfile, builds the image, verifies it starts correctly, and pushes to GHCR on every `main` push that changes the Containerfile or the workflow itself, with SLSA build provenance attestations.
 - **renovate** — Runs every 4 hours to update base image dependencies.
 - **update-minecraft** — Runs on Tue/Wed afternoons UTC to check Mojang's manifest for new Minecraft releases and opens PRs automatically.
