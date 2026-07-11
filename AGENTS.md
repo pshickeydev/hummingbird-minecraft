@@ -6,6 +6,8 @@ Container image that downloads the Minecraft `server.jar` from Mojang at build t
 
 This is a **container-only project** — no application source code. The entire repository is a Containerfile, CI workflows, and automation config.
 
+> **Note:** Any changes to this file that are relevant to users must also be reflected in `README.md`.
+
 ## Commands
 
 ```bash
@@ -35,7 +37,7 @@ timeout 60 podman run --rm hummingbird-minecraft:latest 2>&1 | grep 'You need to
 
 Persistent game data (world, configs, logs) lives in `/server_files` (the WORKDIR), mounted as a volume at runtime. The jar is at `/app/server.jar`.
 
-**CI pipeline** (`build-push.yaml`): lint → build → verify (start container, grep for EULA string) → push to GHCR. Only triggers on pushes/PRs that touch `Containerfile` or the workflow itself.
+**CI pipeline** (`build-push.yaml`): detect-changes → lint → build → verify (start container, grep for EULA string) → push to GHCR. Only triggers on pushes/PRs that touch `Containerfile` or the workflow itself. A `detect-changes` job diffs the Containerfile and skips the full pipeline when only the curl downloader image digest changes (e.g. Renovate curl bumps), so builds only run for Minecraft version updates or openjdk runtime image updates.
 
 **Automated updates:**
 - `update-minecraft.yaml` — checks Mojang's version manifest Tue/Wed 15:00-18:59 UTC, opens PRs with updated download URL and version ARG
